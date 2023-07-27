@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,7 @@ public class CharacterStatus:MonoBehaviour,IATBobject
     [SerializeField] private float _Luckey;
     [SerializeField] private float _Apperance;
     [SerializeField] private GameObject _spriteOnBar;
-    private bool _isActing;
+    public bool _isActing=false;
     
 
     public CharacterStatus() {
@@ -29,8 +30,7 @@ public class CharacterStatus:MonoBehaviour,IATBobject
 
     public void createProgression()
     {
-        //TODO create sprite near progress bar
-        Debug.Log("Created a sprite!");
+        //Nothing todo here, sprite is created in progressBarcontroller
     }
     public void speedAdjust(float adjustment)
     {
@@ -53,5 +53,12 @@ public class CharacterStatus:MonoBehaviour,IATBobject
     {
         get { return _spriteOnBar; }
         set { _spriteOnBar = value; } 
+    }
+
+    public void showCommandMenu()
+    {
+        Debug.Log("show Command");
+        transform.Find("CommandMenu").gameObject.SetActive(true);
+        //TODO set button function
     }
 }

@@ -17,7 +17,7 @@ public class ButtonFollower : MonoBehaviour
         // Update the button's position to match the 2D sprite's position
         if (targetSprite != null)
         {
-            Vector3 targetPosition = targetSprite.position + offset;
+            Vector3 targetPosition = targetSprite.position+offset;
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(targetPosition);
             commandMenu.transform.position = screenPosition;
         }
