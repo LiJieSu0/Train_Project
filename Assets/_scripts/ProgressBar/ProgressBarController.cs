@@ -65,7 +65,7 @@ public class ProgressBarController : MonoBehaviour
 
     private IEnumerator Progressing()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.03f);
 
         while (!_sceneManager.isFinished)
         {
@@ -75,7 +75,7 @@ public class ProgressBarController : MonoBehaviour
                 yield return null;
             }
             progressAllObj();
-            yield return new WaitForSeconds(0.5f); //TODO change the exit condition
+            yield return new WaitForSeconds(0.03f); //TODO change the exit condition
         }
         Debug.Log("Battle is Finished");
     }
@@ -93,6 +93,9 @@ public class ProgressBarController : MonoBehaviour
                 {
                     if(item is CharacterStatus)
                     {
+                        currProgress = 0;
+                        dictPtr.progression = currProgress;
+                        actionDict[item] = dictPtr;
                         CharacterStatus currPlayer = (CharacterStatus)item;
                         currPlayer.isActing = true;
                         _ProgressPaused = true;
@@ -103,7 +106,6 @@ public class ProgressBarController : MonoBehaviour
                         Debug.Log("Enemy is moving");
                         //TODO item is enemy or AI object
                     }
-                    currProgress=0;
                 }
                 else
                 {
@@ -111,7 +113,6 @@ public class ProgressBarController : MonoBehaviour
                     dictPtr.progression = currProgress;
                     setPosByProgress(sprite, currProgress);
                     actionDict[item] = dictPtr;
-                    Debug.Log(currProgress);
                 }
 
                 
@@ -129,25 +130,26 @@ public class ProgressBarController : MonoBehaviour
 
     private IEnumerator PlayerMoving(CharacterStatus currPlayer)
     {
-        yield return WaitForPlayerCommand(currPlayer);
-
-    }
-
-    private IEnumerator WaitForPlayerCommand(CharacterStatus currPlayer)
-    {
         currPlayer.showCommandMenu();
-        while (true) {
-            Debug.Log("Player is thinking");
+        while (true)
+        {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Debug.Log("Key pressed");
                 currPlayer.isActing = false;
                 _ProgressPaused = false;
+                
                 yield break;
             }
             yield return null;
         }
+
     }
+
+    //private IEnumerator WaitForPlayerCommand(CharacterStatus currPlayer)
+    //{
+
+    //}
 
     private void setPosByProgress(GameObject progressSprite, float currProgress) //get sprite on progression bar
     {

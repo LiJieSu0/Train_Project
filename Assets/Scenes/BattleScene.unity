@@ -633,7 +633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _charName: KanSu
-  baseProgressionSpeed: 20
+  baseProgressionSpeed: 2
   _HP: 1
   _EP: 1
   _Strength: 1
@@ -1491,6 +1491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 411852838}
+  isFinished: 0
 --- !u!1 &1475889825
 GameObject:
   m_ObjectHideFlags: 0

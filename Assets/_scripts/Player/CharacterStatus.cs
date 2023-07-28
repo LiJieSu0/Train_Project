@@ -19,13 +19,18 @@ public class CharacterStatus:MonoBehaviour,IATBobject
     [SerializeField] private float _Apperance;
     [SerializeField] private GameObject _spriteOnBar;
     public bool _isActing=false;
-    
+    GameObject panel;
+
+
 
     public CharacterStatus() {
     }
+    public void Start()
+    {
+        panel = transform.Find("CommandMenu").Find("Panel").gameObject;
+    }
     void Update()
     {
-
     }
 
     public void createProgression()
@@ -57,8 +62,42 @@ public class CharacterStatus:MonoBehaviour,IATBobject
 
     public void showCommandMenu()
     {
-        Debug.Log("show Command");
         transform.Find("CommandMenu").gameObject.SetActive(true);
+        commandBtnFunc();
         //TODO set button function
     }
+    public void commandBtnFunc() //take list of skills? ISkill 
+    {
+        
+        int btnCount=panel.transform.childCount;
+        List<Button> btnList=new List<Button>();
+        for(int i=0; i<btnCount; i++)//Btn function here
+        {
+            GameObject tmp = panel.transform.GetChild(i).gameObject;
+            Button tmpBtn = tmp.GetComponent<Button>();
+            tmpBtn.onClick.AddListener(()=>tempBtnFunc(tmp.name));
+            btnList.Add(tmpBtn);
+        }
+    }
+    private void tempBtnFunc(string name)
+    {
+        switch (name)
+        {
+            case "Fire":
+                Debug.Log("Fire!!");
+                break;
+            case "Move":
+                Debug.Log("Move!!");
+                break;
+            case "End":
+                Debug.Log("End!!");
+                break;
+            default:
+                Debug.Log("some command button");
+                break;
+        }
+
+    }
+
+
 }
