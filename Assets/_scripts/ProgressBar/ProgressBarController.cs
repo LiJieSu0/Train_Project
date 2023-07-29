@@ -69,7 +69,6 @@ public class ProgressBarController : MonoBehaviour
 
         while (!_sceneManager.isFinished)
         {
-            Debug.Log("Progessing is running");
             while(_ProgressPaused)
             {
                 yield return null;
@@ -130,9 +129,13 @@ public class ProgressBarController : MonoBehaviour
 
     private IEnumerator PlayerMoving(CharacterStatus currPlayer)
     {
-        currPlayer.showCommandMenu();
         while (true)
         {
+            currPlayer.showCommandMenu();
+            while (currPlayer.isActing)
+            {
+                yield return null;
+            }
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Debug.Log("Key pressed");

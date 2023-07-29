@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterStatus:MonoBehaviour,IATBobject 
+public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
 {
     [SerializeField] private string _charName;
     [SerializeField] private float baseProgressionSpeed;
@@ -27,7 +27,7 @@ public class CharacterStatus:MonoBehaviour,IATBobject
     }
     public void Start()
     {
-        panel = transform.Find("CommandMenu").Find("Panel").gameObject;
+        panel = transform.Find("CharacterUICanvas").Find("CommandMenu").gameObject;
     }
     void Update()
     {
@@ -62,7 +62,7 @@ public class CharacterStatus:MonoBehaviour,IATBobject
 
     public void showCommandMenu()
     {
-        transform.Find("CommandMenu").gameObject.SetActive(true);
+        panel.SetActive(true);
         commandBtnFunc();
         //TODO set button function
     }
@@ -99,5 +99,19 @@ public class CharacterStatus:MonoBehaviour,IATBobject
 
     }
 
+    public float getCurrHealth() {
+        return _HP;
+    }
+
+    private void OnMouseEnter()
+    {
+        //TODO show Healthbar
+        Debug.Log("Show HealthBar");
+    }
+    private void OnMouseExit()
+    {
+        //TODO hide Healthbar
+        Debug.Log("Hide HealthBar");
+    }
 
 }
