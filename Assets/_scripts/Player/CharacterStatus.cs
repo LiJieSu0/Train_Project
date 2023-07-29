@@ -8,7 +8,8 @@ public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
 {
     [SerializeField] private string _charName;
     [SerializeField] private float baseProgressionSpeed;
-    [SerializeField] private float _HP;
+    [SerializeField] private float _MaxHP;
+    [SerializeField] private float _CurrHP;
     [SerializeField] private float _EP;
     [SerializeField] private float _Strength;
     [SerializeField] private float _Agility;
@@ -100,7 +101,11 @@ public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
     }
 
     public float getCurrHealth() {
-        return _HP;
+        return _CurrHP;
+    }
+    public float getMaxHealth()
+    {
+        return _MaxHP;
     }
 
     private void OnMouseEnter()

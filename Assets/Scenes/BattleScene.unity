@@ -637,7 +637,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _charName: KanSu
   baseProgressionSpeed: 2
-  _HP: 100
+  _MaxHP: 200
+  _CurrHP: 100
   _EP: 1
   _Strength: 1
   _Agility: 1
@@ -2085,8 +2086,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2c426171bd9e84fb20689b08e22484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
   Offset: {x: 0, y: 0, z: 0}
 --- !u!1 &1777374718
 GameObject:

@@ -5,13 +5,12 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    public float maxHealth = 100f;
-    [SerializeField]
+    private float maxHealth;
     private float currentHealth;
     [SerializeField]
     private Vector3 Offset;
 
-    private GameObject character;
+    private CharacterStatus character;
 
     // Reference to the HP bar Slider
     private GameObject HealthBarObj;
@@ -22,13 +21,14 @@ public class HealthBar : MonoBehaviour
         HealthBarObj=GetComponent<GameObject>();
         healthSlider = GetComponent<Slider>();
         character = transform.parent.gameObject. //canvas
-                    transform.parent.gameObject; //character;
-
-        currentHealth = maxHealth;
+                    transform.parent.gameObject.
+                    GetComponent<CharacterStatus>();//character;
+        maxHealth=character.getMaxHealth();
+        currentHealth=character.getCurrHealth();
     }
     private void Update()
     {
-        currentHealth = character.GetComponent<CharacterStatus>().getCurrHealth();
+        currentHealth = character.getCurrHealth();
         UpdateHealthBar();
     }
     // Function to decrease health
@@ -51,8 +51,7 @@ public class HealthBar : MonoBehaviour
 
     void Die()
     {
-        // Implement death logic here if needed
-        //Destroy(gameObject);
+
         Debug.Log("Die!!");
     }
 }
