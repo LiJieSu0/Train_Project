@@ -20,7 +20,9 @@ public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
     [SerializeField] private float _Apperance;
     [SerializeField] private GameObject _spriteOnBar;
     public bool _isActing=false;
-    GameObject panel;
+    private GameObject CommandMenu;
+    private GameObject UICanvas;
+    private GameObject HealthBar;
 
 
 
@@ -28,7 +30,10 @@ public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
     }
     public void Start()
     {
-        panel = transform.Find("CharacterUICanvas").Find("CommandMenu").gameObject;
+        UICanvas = transform.Find("CharacterUICanvas").gameObject;
+        CommandMenu = UICanvas.transform.Find("CommandMenu").gameObject;
+        HealthBar = UICanvas.transform.Find("HealthBar").gameObject;
+        
     }
     void Update()
     {
@@ -63,18 +68,18 @@ public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
 
     public void showCommandMenu()
     {
-        panel.SetActive(true);
+        CommandMenu.SetActive(true);
         commandBtnFunc();
         //TODO set button function
     }
     public void commandBtnFunc() //take list of skills? ISkill 
     {
         
-        int btnCount=panel.transform.childCount;
+        int btnCount= CommandMenu.transform.childCount;
         List<Button> btnList=new List<Button>();
         for(int i=0; i<btnCount; i++)//Btn function here
         {
-            GameObject tmp = panel.transform.GetChild(i).gameObject;
+            GameObject tmp = CommandMenu.transform.GetChild(i).gameObject;
             Button tmpBtn = tmp.GetComponent<Button>();
             tmpBtn.onClick.AddListener(()=>tempBtnFunc(tmp.name));
             btnList.Add(tmpBtn);
@@ -85,7 +90,6 @@ public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
         switch (name)
         {
             case "Fire":
-                Debug.Log("Fire!!");
                 break;
             case "Move":
                 Debug.Log("Move!!");
@@ -100,6 +104,14 @@ public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
 
     }
 
+    private IEnumerator FireButtonFunc()
+    {
+        /*
+         
+         */
+        yield return null;
+    }
+
     public float getCurrHealth() {
         return _CurrHP;
     }
@@ -110,12 +122,13 @@ public class CharacterStatus:MonoBehaviour,IATBobject,Iinfo
 
     private void OnMouseEnter()
     {
-        //TODO show Healthbar
-        Debug.Log("Show HealthBar");
+        HealthBar.SetActive(true);
     }
     private void OnMouseExit()
     {
         //TODO hide Healthbar
+        HealthBar.SetActive(false);
+
         Debug.Log("Hide HealthBar");
     }
 

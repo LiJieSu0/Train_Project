@@ -7,24 +7,25 @@ public class DragController : MonoBehaviour
     private Vector3 offset;
     private bool isDragging = false;
     private Vector3 _initPos;
+    private bool _isDraggable;
     private void Start()
     {
-        _initPos= transform.position; 
+        _isDraggable = true; //TODO only in deploy stage;
+        _initPos= transform.position; //TODO set as the first position in prepartion area.
     }
     void OnMouseDown()
     {
-        // Get the mouse position in world coordinates
+        if(!_isDraggable)
+            return;
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        // Calculate the offset between the object's position and the mouse position
         offset = transform.position - mousePosition;
-        Debug.Log(offset);
-        // Set the dragging flag to true
         isDragging = true;
     }
 
     void OnMouseDrag()
     {
+        if (!_isDraggable)
+            return;
         if (isDragging)
         {
             // Get the current mouse position in world coordinates
@@ -37,8 +38,11 @@ public class DragController : MonoBehaviour
 
     void OnMouseUp()
     {
+        if (!_isDraggable)
+            return;
         GameObject bumped = EventObserver.currObj;
-        if(bumped != null)
+        
+        if(bumped != null&& bumped.transform.parent.gameObject.name == "PlayerField")
         {
             transform.parent= bumped.transform;
             transform.localPosition=new Vector3(0,0,0);

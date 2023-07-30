@@ -26,16 +26,18 @@ public class GridFieldCreate : MonoBehaviour
             for(int y = 0; y < _height; y++)
             {
                 var spawnedTile=Instantiate(_tilePrefab,new Vector3(x,y),Quaternion.identity);
-                spawnedTile.name = $"Tile {x} {y}";
+                spawnedTile.name = $"Tile_{x}_{y}";
                 spawnedTile.transform.parent = fieldType.transform;
                 spawnedTile.transform.localPosition=new Vector3(x*_scale,y*_scale);
                 var isOffSet = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
-                if (fieldType.name == "PlayerField"&&x==0&&y==0)
-                {
-                    var spawnedPlayer=Instantiate(_player,new Vector2(0,0),Quaternion.identity);
-                    spawnedPlayer.transform.parent = spawnedTile.transform;
-                    spawnedPlayer.transform.localPosition = new Vector2(0, 0);
-                }
+                //if (fieldType.name == "PlayerField"&&x==0&&y==0)
+                //{
+                //    var spawnedPlayer=Instantiate(_player,new Vector2(0,0),Quaternion.identity);
+                //    spawnedPlayer.transform.parent = spawnedTile.transform;
+                //    spawnedPlayer.transform.localPosition = new Vector2(0, 0);
+                //}
+
+                //TODO generate enemy on enemy field.
                 spawnedTile.Init(isOffSet);
             }
         }
