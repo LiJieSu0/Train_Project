@@ -13,9 +13,9 @@ Battle Field
 There are 6 field positions on each player field and enemy field. 6 positions are separated by front line and back line.
 The front line and back line both includes 3 positions, top middle bottom. The naming rule should be followed
 
-BT (Backline Top)       FT(Frontline Top)
-BM (Backline Middle)    FM(Frontline Middle)
-BB (Backline Bottom)    FB(Frontline Bottom)
+BT idx2(Backline Top)       FT idx5(Frontline Top)
+BM idx1(Backline Middle)    FM idx4(Frontline Middle)
+BB idx0(Backline Bottom)    FB idx3(Frontline Bottom)
 
 if the position belongs player field, the name should add P_ before the position, like P_BT.
 This naming rule could be combined with the characters naming rule mentioned earlier,

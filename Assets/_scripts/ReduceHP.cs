@@ -20,7 +20,7 @@ public class ReduceHP : MonoBehaviour
     }
     public void OnButtonClick(Creature myCreature)
     {
-        myCreature._hp -= btnDamage;
+        //myCreature._hp -= btnDamage;
         GameEvents.current.HpReduce(myCreature);
     }
 }
