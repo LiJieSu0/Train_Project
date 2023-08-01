@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum FieldPosition
 {
+    NULL=-1,
     P_BB = 0,
     P_BM = 1,
     P_BT = 2,
@@ -34,7 +35,7 @@ public class SceneManager : MonoBehaviour
     public GameObject p6;
     public static SceneManager _sceneManager;
     public FieldPosition currMoving;
-
+    public bool _isSelecting=false;
 
     private void Awake()
     {
