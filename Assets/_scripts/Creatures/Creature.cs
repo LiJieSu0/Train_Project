@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Creature : MonoBehaviour
 {
@@ -18,14 +19,17 @@ public class Creature : MonoBehaviour
     [SerializeField] protected float _Luckey;
     [SerializeField] protected float _Apperance;
     [SerializeField] public string ID;
+    [SerializeField] public GameObject _CreatureIcon;
+
     //Character Attribute Design
 
     //in game attribute
-    [SerializeField] protected float _CurrHP;
-    [SerializeField] protected float _CurrEP;
+    [SerializeField] public float _CurrHP;
+    [SerializeField] public float _CurrEP;
+    [SerializeField] public float _CurrProgress=0;
+    [SerializeField] public float _TimeToAction=999;
 
     protected FieldPosition fieldPos;
-
     public void Awake()
     {
         fieldPos = (FieldPosition)Enum.Parse(typeof(FieldPosition), gameObject.transform.parent.gameObject.name);
@@ -46,4 +50,8 @@ public class Creature : MonoBehaviour
         return fieldPos;
     }
 
+    public float getSpeed()
+    {
+        return _Speed;
+    }
 }

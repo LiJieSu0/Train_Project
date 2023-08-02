@@ -9,23 +9,24 @@ public class TargetAnchor : MonoBehaviour
     // Start is called before the first frame update
     private FieldPosition _pos;
     private SpriteRenderer _spriteRenderer;
+    private List<SpriteRenderer> _childrenLayout=new List<SpriteRenderer>();
     void Start()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
+            _childrenLayout.Add(transform.GetChild(i).GetComponent<SpriteRenderer>());
         }
+        disableChildLayoutSprite();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _spriteRenderer.enabled = false;
         _pos = (FieldPosition)Enum.Parse(typeof(FieldPosition),transform.parent.gameObject.name);
         GameEvents.current.onShowTargetPos += showAnchor;
-        GameEvents.current.onHideTargetPos += hideAnchor;   
-
+        GameEvents.current.onHideTargetPos += hideAnchor;
     }
 
     void showAnchor(FieldPosition pos)
     {
-        if(_pos == pos)
+        if(_pos == pos && transform.parent.transform.childCount>1)
         {
             _spriteRenderer.enabled = true;
         }
@@ -39,21 +40,35 @@ public class TargetAnchor : MonoBehaviour
     }
     private void OnMouseEnter()
     {
-        for (int i = 0; i < transform.childCount; i++)//TODO edit the sprite shape
-        {
-            transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = true;
+        if(_spriteRenderer.enabled) {
+            enableChildLayoutSprite();
         }
     }
     private void OnMouseExit()
     {
-        for (int i = 0; i < transform.childCount; i++)//TODO edit the sprite shape
+        if(_spriteRenderer.enabled)
         {
-            transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
+            disableChildLayoutSprite();
         }
     }
     private void OnMouseUp()
     {
+        disableChildLayoutSprite();
         GameEvents.current.clickTarget(_pos);
-        //TODO return _pos to P_Merchant
+    }
+    
+    private void enableChildLayoutSprite()
+    {
+        foreach (SpriteRenderer child in _childrenLayout)
+        {
+            child.enabled = true;
+        }
+    }
+    private void disableChildLayoutSprite()
+    {
+        foreach (SpriteRenderer child in _childrenLayout)
+        {
+            child.enabled = false;
+        }
     }
 }

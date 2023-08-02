@@ -21,14 +21,12 @@ public class Player : Creature
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager._sceneManager.currMoving == fieldPos)
-        {
+
             Debug.Log(_charName + " is moving");
             if (Input.GetKeyDown(KeyCode.T))
             {
                 Debug.Log("Player is moving");
             }
-        }
     }
 
 

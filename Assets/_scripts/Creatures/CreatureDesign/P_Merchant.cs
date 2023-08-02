@@ -4,29 +4,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class P_Merchant : Player
 {
-    enum state
-    {
-        btnSelecting,
-        targetSelecting,
-        skillCasting,
-        finished,
-    }
-    private state _currState=state.btnSelecting;
+
+    private PlayerState _currState = PlayerState.btnSelecting;
     private BasicSkill _selectedSkill=null;
-    private FieldPosition targetPos=FieldPosition.NULL;
-    public class Smash : BasicSkill
-    {
-        public float damage = 50;
-        public Smash(string skillName)
-        {
-            _skillName= skillName;
-            _availablePosList.Add(FieldPosition.E_FB);
-            _availablePosList.Add(FieldPosition.E_FM);
-            _availablePosList.Add(FieldPosition.E_FT);
-        }
-    }
+    private FieldPosition _targetPos=FieldPosition.NULL;
+
+    
+
     void Start()
     {
         initBtnList();
@@ -35,7 +23,7 @@ public class P_Merchant : Player
         skillBtnList[1].onClick.AddListener(skill2);
         skillBtnList[2].onClick.AddListener(skill3);
         skillBtnList[3].onClick.AddListener(skill4);
-        GameEvents.current.onClickTarget += getPos;
+        GameEvents.current.onClickTarget += setTargetPos;
         
     }
 
@@ -45,26 +33,31 @@ public class P_Merchant : Player
         Debug.Log(_currState);
         switch (_currState)
         {
-            case state.btnSelecting:
+            case PlayerState.btnSelecting:
                 Debug.Log("Player is thinking");
                 break;
-            case state.targetSelecting:
+            case PlayerState.targetSelecting:
                 if (Input.GetMouseButtonDown(1))
                 {
                     foreach(var i in _selectedSkill._availablePosList)
                     {
                         GameEvents.current.hideTargetPos(i);
                     }
-                    _currState = state.btnSelecting;
+                    _currState = PlayerState.btnSelecting;
+                    _selectedSkill = null;
                     break;
                 }
-                Debug.Log("targetPos " + targetPos);
-                break;
-            case state.skillCasting:
+                //get enemy creature
+                Debug.Log("targetPos " + _targetPos);
+                if (_targetPos != FieldPosition.NULL) { 
+                    dealDamgeToTarget(_selectedSkill);
+                }
+                break;  
+            case PlayerState.skillCasting:
 
                 Debug.Log("some casting animation");
                 break;
-            case state.finished:
+            case PlayerState.finished:
                 Debug.Log("goto next moving creature");
                 break;
             default:
@@ -94,7 +87,7 @@ public class P_Merchant : Player
     public void skill1Func(BasicSkill skill) {
         Debug.Log("skill1 Pressed");
         _selectedSkill = skill;
-        _currState = state.targetSelecting;
+        _currState = PlayerState.targetSelecting;
         foreach(var i in skill._availablePosList)
         {
             GameEvents.current.showTargetPos(i);
@@ -102,8 +95,23 @@ public class P_Merchant : Player
         //TODO show available position;
     }
 
-    public void getPos(FieldPosition pos)
+    public void setTargetPos(FieldPosition pos)
     {
-        targetPos = pos;
+        if(_currState == PlayerState.targetSelecting)
+        {
+            _targetPos = pos;
+        }
+    }
+
+    public void dealDamgeToTarget(BasicSkill skill)
+    {
+        Smash tmp = (Smash)skill;
+        Debug.Log("Damage Dealt to " + tmp.damage+" at position "+_targetPos);
+        foreach (var i in _selectedSkill._availablePosList)
+        {
+            if (i == _targetPos) continue;//TODO change anchor color
+            GameEvents.current.hideTargetPos(i);
+        }
+        _currState = PlayerState.skillCasting;
     }
 }

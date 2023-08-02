@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameEvents : MonoBehaviour
 {
     public static GameEvents current;
     public GameObject pointedLayout;
+
     void Awake()
     {
         current = this;
@@ -25,7 +27,7 @@ public class GameEvents : MonoBehaviour
         {
             pointedLayout = hit.collider.gameObject;
             FieldPosition hitPos = (FieldPosition)
-                                   Enum.Parse(typeof(FieldPosition), pointedLayout.transform.parent.gameObject.name);
+                        Enum.Parse(typeof(FieldPosition), pointedLayout.transform.parent.gameObject.name);
 
             
         }
