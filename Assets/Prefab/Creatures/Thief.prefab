@@ -662,7 +662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d847d21d33f07c1478f20bfe5222d132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _charName: 
+  _CharName: p_thief
   _Speed: 11
   _MaxHP: 0
   _MaxEP: 0
@@ -674,11 +674,12 @@ MonoBehaviour:
   _Luckey: 0
   _Apperance: 0
   ID: 
-  _CreatureIcon: {fileID: 0}
+  _CreatureIcon: {fileID: 2800000, guid: 16526648d92315f42a6db5593dc3cef6, type: 3}
   _CurrHP: 0
   _CurrEP: 0
   _CurrProgress: 0
   _TimeToAction: 0
+  _fieldPos: 5
 --- !u!1 &1000012730742446
 GameObject:
   m_ObjectHideFlags: 0

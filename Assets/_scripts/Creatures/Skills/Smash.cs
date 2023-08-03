@@ -11,6 +11,6 @@ public class Smash : BasicSkill
         _skillType = SkillType.Damage;
         _availablePosList.Add(FieldPosition.E_FB);
         _availablePosList.Add(FieldPosition.E_FM);
-        _availablePosList.Add(FieldPosition.E_FT);
+        _availablePosList.Add(FieldPosition.E_BM);
     }
 }

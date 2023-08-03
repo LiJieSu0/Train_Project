@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class P_Merchant : Player
 {
 
-    private PlayerState _currState = PlayerState.btnSelecting;
+    private PlayerState _currState = PlayerState.noAction;
     private BasicSkill _selectedSkill=null;
     private FieldPosition _targetPos=FieldPosition.NULL;
 
@@ -30,11 +30,11 @@ public class P_Merchant : Player
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(_currState);
         switch (_currState)
         {
+            case PlayerState.noAction:
+                break;
             case PlayerState.btnSelecting:
-                Debug.Log("Player is thinking");
                 break;
             case PlayerState.targetSelecting:
                 if (Input.GetMouseButtonDown(1))
@@ -56,13 +56,14 @@ public class P_Merchant : Player
             case PlayerState.skillCasting:
 
                 Debug.Log("some casting animation");
+                
                 break;
             case PlayerState.finished:
                 Debug.Log("goto next moving creature");
+                _currState = PlayerState.noAction;
+                
                 break;
-            default:
-                Debug.Log("Player default State");
-                break;
+    
         }
     }
     public void setSkill1(Button btn1,BasicSkill skill)
@@ -85,7 +86,6 @@ public class P_Merchant : Player
 
     }
     public void skill1Func(BasicSkill skill) {
-        Debug.Log("skill1 Pressed");
         _selectedSkill = skill;
         _currState = PlayerState.targetSelecting;
         foreach(var i in skill._availablePosList)

@@ -493,7 +493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c56f0e35a65d4ac4cbc127795b4de714, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _charName: enemy Merchant
+  _CharName: e_mer
   _Speed: 7
   _MaxHP: 0
   _MaxEP: 0
@@ -505,7 +505,7 @@ MonoBehaviour:
   _Luckey: 0
   _Apperance: 0
   ID: 
-  _CreatureIcon: {fileID: 0}
+  _CreatureIcon: {fileID: 2800000, guid: 604076d6bbfda3446a28c85fd9e40a40, type: 3}
   _CurrHP: 0
   _CurrEP: 0
   _CurrProgress: 0

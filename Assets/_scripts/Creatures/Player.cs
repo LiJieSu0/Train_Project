@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Player : Creature
 {
+    private PlayerState _currState = PlayerState.noAction;
+    private BasicSkill _selectedSkill = null;
+    private FieldPosition _targetPos = FieldPosition.NULL;
     protected GameObject commandPanel;
     protected List<Button> skillBtnList= new List<Button>();
     // Start is called before the first frame update
@@ -22,11 +25,6 @@ public class Player : Creature
     void Update()
     {
 
-            Debug.Log(_charName + " is moving");
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                Debug.Log("Player is moving");
-            }
     }
 
 

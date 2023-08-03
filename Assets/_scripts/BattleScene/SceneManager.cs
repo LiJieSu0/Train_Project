@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public enum PlayerState
 {
+    noAction,
     btnSelecting,
     targetSelecting,
     skillCasting,
@@ -32,131 +33,217 @@ public class SceneManager : MonoBehaviour
 {
     private enum SceneState
     {
-        sceneCut,
+        cutScene,
         battleStart,
-        battleEnd,
+        calOrder,
+        playerTurn,
+        enemyTurn,
         win,
         lose,
+        battleEnd,
     }
+    public static SceneManager _sceneManager;
+    [SerializeField] public GameObject _iconBg;
     //Load player characters and team formation from other scene or data manager.
     public List<GameObject> playerMemberLst= new List<GameObject>();
     //Load Enemy character list and formation from other scene or data manager.
     public List<GameObject> enemyMemberLst= new List<GameObject>();
-    private List<Creature> creatureList= new List<Creature>();
+    
+    private List<GameObject> _creatureObjList= new List<GameObject>();
+    private List<GameObject> _fixedSeqObjList=new List<GameObject> ();
+    private Dictionary<String,GameObject> _iconBgDict=new Dictionary<string, GameObject>();
 
-    public bool _isSelecting=false;
-    [SerializeField] public GameObject _iconBg;
     private GameObject orderSeq;
     private float _currTimeToAction;
-
-    public static SceneManager _sceneManager;
+    private SceneState _currSceneState;
+    
+    
     private void Awake()
     {
         _sceneManager = this;
         setFieldPosObj();
-        setCreatureList();
         orderSeq = GameObject.Find("OrderSeq");
-        createCreatureIconOnSeq();
+        setFixedSeqList();
     }
     void Start()
     {
         calTimeToAction();
         sortCreatureList();
+        createCreatureIconOnSeq();
         calProgressAfterTTA();
-        //TODO some creature acting, and calTTA
+        //Debug.Log("start coroutine");
+        //StartCoroutine(SeqOrder());
+        _currSceneState = SceneState.cutScene;
     }
 
     void Update()
     {
-        
-    }
-
-    void createCreatureIconOnSeq()
-    {
-        for (int i = 0; i < creatureList.Count; i++)
+        switch (_currSceneState)
         {
-            GameObject tmpBg = Instantiate(_iconBg, orderSeq.transform.GetChild(i));
-            tmpBg.GetComponent<CreatureIconBg>().setColor(creatureList[i].GetComponent<Creature>() is Player);
-            //TODO attach icon to bg
+            case SceneState.cutScene:
+                Debug.Log("some cutscene");
+                _currSceneState = SceneState.battleStart;
+                break;
+            case SceneState.battleStart:
+                Debug.Log("Battle Start");
+                _currSceneState= SceneState.calOrder;
+                break;
+
+            case SceneState.calOrder:
+                calTimeToAction();
+                Debug.Log("cal finished");
+                sortCreatureList();
+                Debug.Log("sort finsihed");
+                changeSeqIconPos();
+                Debug.Log("change finished");
+                calProgressAfterTTA();
+                Debug.Log("TTA finished");
+
+                if (_creatureObjList[0].GetComponent<Creature>() is Player)
+                {
+                    _currSceneState= SceneState.playerTurn;
+                }
+                else
+                {
+                    _currSceneState= SceneState.enemyTurn;
+                }
+                break;
+
+            case SceneState.playerTurn:
+                //TODO get current player script and status
+                if (Input.GetKeyUp(KeyCode.R))
+                {
+                    _currSceneState = SceneState.calOrder;
+                }
+                //TODO current if player script state is finished, back to calOrder
+                break;
+
+            case SceneState.enemyTurn:
+                //TDOO perform AI action
+                if (Input.GetKeyUp(KeyCode.R))
+                {
+                    _currSceneState= SceneState.calOrder;
+                }
+                break;
+
+            case SceneState.battleEnd:
+                Debug.Log("pass data to another scene");
+                break;
+            default:
+                break;
         }
+
+
+        if(Input.GetKeyUp(KeyCode.U)) {
+            calTimeToAction();
+            Debug.Log("cal finished");
+            sortCreatureList();
+            Debug.Log("sort finsihed");
+            changeSeqIconPos();
+            Debug.Log("change finished");
+            calProgressAfterTTA();
+            Debug.Log("TTA finished");
+        }
+
     }
 
-    private void placeCharacter(GameObject parent,GameObject child)
-    {
-        Instantiate(child,parent.transform);
-    }
+
+
     private void setFieldPosObj()
     {
-        //Player_Field
-        GameObject p_ft = GameObject.Find(FieldPosition.P_FT.ToString());
-        GameObject p_fm = GameObject.Find(FieldPosition.P_FM.ToString());
-        GameObject p_fb = GameObject.Find(FieldPosition.P_FB.ToString());
-        GameObject p_bt = GameObject.Find(FieldPosition.P_BT.ToString());
-        GameObject p_bm = GameObject.Find(FieldPosition.P_BM.ToString());
-        GameObject p_bb = GameObject.Find(FieldPosition.P_BB.ToString());
 
-        //Enemy_Field
-        GameObject e_ft = GameObject.Find(FieldPosition.E_FT.ToString());
-        GameObject e_fm = GameObject.Find(FieldPosition.E_FM.ToString());
-        GameObject e_fb = GameObject.Find(FieldPosition.E_FB.ToString());
-        GameObject e_bt = GameObject.Find(FieldPosition.E_BT.ToString());
-        GameObject e_bm = GameObject.Find(FieldPosition.E_BM.ToString());
-        GameObject e_bb = GameObject.Find(FieldPosition.E_BB.ToString());
-
-        //PlayerCreature
-        if(playerMemberLst[0]!=null)placeCharacter(p_ft, playerMemberLst[0]);
-        if (playerMemberLst[1] != null) placeCharacter(p_fm, playerMemberLst[1]);
-        if (playerMemberLst[2] != null) placeCharacter(p_fb, playerMemberLst[2]);
-        if (playerMemberLst[3] != null) placeCharacter(p_bt, playerMemberLst[3]);
-        if (playerMemberLst[4] != null) placeCharacter(p_bm, playerMemberLst[4]);
-        if (playerMemberLst[5] != null) placeCharacter(p_bb, playerMemberLst[5]);
-
-        if (enemyMemberLst[0]!=null) placeCharacter(e_ft, enemyMemberLst[0]);
-        if (enemyMemberLst[1] != null) placeCharacter(e_fm, enemyMemberLst[1]);
-        if (enemyMemberLst[2] != null) placeCharacter(e_fb, enemyMemberLst[2]);
-        if (enemyMemberLst[3] != null) placeCharacter(e_bt, enemyMemberLst[3]);
-        if (enemyMemberLst[4] != null) placeCharacter(e_bm, enemyMemberLst[4]);
-        if (enemyMemberLst[5] != null) placeCharacter(e_bb, enemyMemberLst[5]);
-    }
-
-    private void setCreatureList()
-    {
-        for (var i = 0; i < playerMemberLst.Count; i++)
+        for(int i = 0; i < 6; i++)
         {
             if (playerMemberLst[i] != null)
             {
-                creatureList.Add(playerMemberLst[i].GetComponent<Creature>());
+                FieldPosition tmpField = (FieldPosition)i;
+                GameObject pos = GameObject.Find(tmpField.ToString());
+                GameObject c=Instantiate(playerMemberLst[i], pos.transform);
+                c.GetComponent<Creature>()._fieldPos = tmpField;
+                _creatureObjList.Add(c);
             }
             if (enemyMemberLst[i] != null)
             {
-                creatureList.Add(enemyMemberLst[i].GetComponent<Creature>());
+                FieldPosition tmpField = (FieldPosition)i+6;
+                GameObject pos = GameObject.Find(tmpField.ToString());
+                GameObject c = Instantiate(enemyMemberLst[i], pos.transform);
+                c.GetComponent<Creature>()._fieldPos = tmpField;
+                _creatureObjList.Add(c);
+
             }
+        }
+
+    }
+
+    private void setFixedSeqList()
+    {
+        for(var i =0;i<orderSeq.transform.childCount;i++)
+        {
+            _fixedSeqObjList.Add(orderSeq.transform.GetChild(i).gameObject);
         }
     }
 
-    private void sortCreatureList()
-    {
-        creatureList.Sort((c1, c2) => c1._TimeToAction.CompareTo(c2._TimeToAction));
-        _currTimeToAction = creatureList[0]._TimeToAction;
-    }
 
     private void calTimeToAction()
     {
-        foreach(var c in creatureList)
+        foreach(var obj in _creatureObjList)
         {
-            c._TimeToAction = (100f - c._CurrProgress) / c.getSpeed();
+            Creature c=obj.GetComponent<Creature>();
+            c._TimeToAction = (float)Math.Round((100f - c._CurrProgress) / c.getSpeed(),2);
+        }
+    }
+    private void sortCreatureList()
+    {
+        _creatureObjList.Sort((c1, c2) => c1.GetComponent<Creature>()._TimeToAction.
+                                        CompareTo(c2.GetComponent<Creature>()._TimeToAction));
+        _currTimeToAction = _creatureObjList[0].GetComponent<Creature>()._TimeToAction;
+    }
+
+
+    private void createCreatureIconOnSeq()
+    {
+        for (int i = 0; i < _creatureObjList.Count; i++)
+        {
+            GameObject tmpBg = Instantiate(_iconBg, orderSeq.transform.GetChild(i));
+            tmpBg.name = _creatureObjList[i].GetComponent<Creature>()._CharName;
+            tmpBg.GetComponent<CreatureIconBg>().setColor(_creatureObjList[i].GetComponent<Creature>() is Player);
+            tmpBg.transform.GetChild(0).GetComponent<RawImage>().texture = _creatureObjList[i].GetComponent<Creature>()._CreatureIcon;
+            _iconBgDict.Add(tmpBg.name,tmpBg);
         }
     }
 
     private void calProgressAfterTTA() //TTA means time to action
     {
         
-        creatureList[0]._CurrProgress = 0;//first item progress is 100 need to be reset after action.
-        for (var i =1; i < creatureList.Count; i++)
+        _creatureObjList[0].GetComponent<Creature>()._CurrProgress = 0;//first item progress is 100 need to be reset after action.
+        for (var i =1; i < _creatureObjList.Count; i++)
         {
-            Creature c = creatureList[i];
-            c._CurrProgress += _currTimeToAction * c.getSpeed();
+            Creature c = _creatureObjList[i].GetComponent<Creature>();
+            c._CurrProgress += (float)Math.Round(_currTimeToAction * c.getSpeed(),2);
+        }
+
+    }
+    private void changeSeqIconPos() 
+    {
+        for(int i=0;i< _creatureObjList.Count; i++)
+        {
+            GameObject tmpBg = _iconBgDict[_creatureObjList[i].GetComponent<Creature>()._CharName];
+            tmpBg.transform.SetParent(orderSeq.transform.GetChild(i));
+            tmpBg.transform.localPosition=new Vector3(0,0,0);  
+            tmpBg.transform.localScale = new Vector3(1, 1, 1);
         }
     }
 
+    private IEnumerator SeqOrder()
+    {
+        yield return new WaitForSeconds(5);
+        while(true)
+        {
+            calTimeToAction();
+            sortCreatureList();
+            changeSeqIconPos();
+            calProgressAfterTTA();
+            yield return new WaitForSeconds(5f);
+        }
+    }
 }

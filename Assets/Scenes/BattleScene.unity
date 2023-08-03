@@ -642,93 +642,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1920425153881765718, guid: 619a2690d65cab64fb121b187bd48478, type: 3}
   m_PrefabInstance: {fileID: 1155427808}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &206415802
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 206415803}
-  - component: {fileID: 206415806}
-  - component: {fileID: 206415805}
-  - component: {fileID: 206415804}
-  m_Layer: 5
-  m_Name: RawImage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &206415803
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206415802}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 936544880}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &206415804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206415802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fc82f7836e61e14db647af3bc420f66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerColor: {r: 0.19045922, g: 0.80784315, b: 0.9433962, a: 0.49019608}
-  enemyColor: {r: 0.8301887, g: 0.08928439, b: 0.25681308, a: 0.49019608}
---- !u!114 &206415805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206415802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Texture: {fileID: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
---- !u!222 &206415806
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206415802}
-  m_CullTransparentMesh: 1
 --- !u!1 &247852571
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,16 +1079,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dafb7571f837ecc4a8288d6f30fd0d81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _iconBg: {fileID: 4456593002350345783, guid: 51649d120a13410478e2c1928910371d, type: 3}
   playerMemberLst:
   - {fileID: 1000010755293042, guid: 978fa2fb617654f5eaeff9da6fc7d116, type: 3}
-  - {fileID: 0}
+  - {fileID: 1000013261649242, guid: 7d908ba845b1044e6829ed5fb7c4be10, type: 3}
   - {fileID: 1000010854855540, guid: a3c1faf915dc240bca8ed7566d46910c, type: 3}
   - {fileID: 1000013034572668, guid: 389c7e1a1dabb4e1e917001420b89c9a, type: 3}
   - {fileID: 1000011742669328, guid: 315058484cf2044ce8dcb608b4678ff6, type: 3}
   - {fileID: 1000012663239756, guid: 13c470c5b8dcd4854834911f7e0a9a6c, type: 3}
   enemyMemberLst:
   - {fileID: 1000010755293042, guid: c7f38177e60168843bf6c311c71e8254, type: 3}
-  - {fileID: 1000013261649242, guid: 9232b996883a28e40852e39cb611ec96, type: 3}
+  - {fileID: 0}
   - {fileID: 1000010854855540, guid: c81caee40d5a3504faada0ab02829c3d, type: 3}
   - {fileID: 1000013034572668, guid: 3c86f93d91da6114f8df5da810242bc6, type: 3}
   - {fileID: 1000011742669328, guid: 47949dc2f49ce0a4a9d20b9b3410d484, type: 3}
@@ -2549,8 +2463,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 206415803}
+  m_Children: []
   m_Father: {fileID: 2079890387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

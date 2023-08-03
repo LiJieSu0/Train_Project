@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Creature : MonoBehaviour
 {
     //Character Attribute Design
-    [SerializeField] protected string _charName;
+    [SerializeField] public string _CharName;
     [SerializeField] protected float _Speed;
     [SerializeField] protected float _MaxHP;
     [SerializeField] protected float _MaxEP;
@@ -19,20 +19,20 @@ public class Creature : MonoBehaviour
     [SerializeField] protected float _Luckey;
     [SerializeField] protected float _Apperance;
     [SerializeField] public string ID;
-    [SerializeField] public GameObject _CreatureIcon;
+    [SerializeField] public Texture _CreatureIcon;
 
     //Character Attribute Design
 
     //in game attribute
-    [SerializeField] public float _CurrHP;
-    [SerializeField] public float _CurrEP;
-    [SerializeField] public float _CurrProgress=0;
-    [SerializeField] public float _TimeToAction=999;
+    public float _CurrHP;
+    public float _CurrEP;
+    public float _CurrProgress;
+    public float _TimeToAction;
 
-    protected FieldPosition fieldPos;
+    public FieldPosition _fieldPos;
     public void Awake()
     {
-        fieldPos = (FieldPosition)Enum.Parse(typeof(FieldPosition), gameObject.transform.parent.gameObject.name);
+        //fieldPos = (FieldPosition)Enum.Parse(typeof(FieldPosition), gameObject.transform.parent.gameObject.name);
         //Get parent position name and turn it into Enum field position
     }
 
@@ -45,13 +45,11 @@ public class Creature : MonoBehaviour
     {
 
     }
-    public FieldPosition getPos()
-    {
-        return fieldPos;
-    }
+
 
     public float getSpeed()
     {
         return _Speed;
     }
+
 }
