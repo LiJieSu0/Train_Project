@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 8869196010514579634}
   - component: {fileID: 4179089224346734399}
   - component: {fileID: 5840587289915460442}
-  - component: {fileID: 830516271903804484}
+  - component: {fileID: 2236592835552137493}
   m_Layer: 5
   m_Name: IconBg
   m_TagString: Untagged
@@ -146,7 +146,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &830516271903804484
+--- !u!114 &2236592835552137493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,8 +155,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4456593002350345783}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fc82f7836e61e14db647af3bc420f66, type: 3}
+  m_Script: {fileID: 11500000, guid: faf17bec5d78d9e45aafd7665fc93863, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerColor: {r: 0.19045922, g: 0.80784315, b: 0.9433962, a: 0.49019608}
-  enemyColor: {r: 0.8301887, g: 0.08928439, b: 0.25681308, a: 0.49019608}
+  playerColor: {r: 0, g: 0.19581509, b: 1, a: 0.5686275}
+  enemyColor: {r: 0.8867924, g: 0.14556777, b: 0.16007167, a: 0.58431375}

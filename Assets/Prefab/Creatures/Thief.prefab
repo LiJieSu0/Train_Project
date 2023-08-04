@@ -605,7 +605,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000013306724104}
   - component: {fileID: 95000010572177686}
-  - component: {fileID: -5795992976680899955}
+  - component: {fileID: -8358385043995551477}
   m_Layer: 0
   m_Name: Thief
   m_TagString: Untagged
@@ -650,7 +650,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-5795992976680899955
+--- !u!114 &-8358385043995551477
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -662,8 +662,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d847d21d33f07c1478f20bfe5222d132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CharName: p_thief
-  _Speed: 11
+  _CharName: 
+  _Speed: 12
   _MaxHP: 0
   _MaxEP: 0
   _Strength: 0
@@ -679,7 +679,10 @@ MonoBehaviour:
   _CurrEP: 0
   _CurrProgress: 0
   _TimeToAction: 0
-  _fieldPos: 5
+  _effectList: []
+  _fieldPos: 0
+  healthBar: {fileID: 2357324993082618579, guid: a58a33a5991a3c94fbb57afaecf1f03a, type: 3}
+  _currPlayerState: 0
 --- !u!1 &1000012730742446
 GameObject:
   m_ObjectHideFlags: 0

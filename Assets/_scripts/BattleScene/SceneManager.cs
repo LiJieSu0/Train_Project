@@ -38,6 +38,7 @@ public class SceneManager : MonoBehaviour
         calOrder,
         playerTurn,
         enemyTurn,
+        pending,
         win,
         lose,
         battleEnd,
@@ -56,7 +57,7 @@ public class SceneManager : MonoBehaviour
     private GameObject orderSeq;
     private float _currTimeToAction;
     private SceneState _currSceneState;
-    
+    public Creature _currPlayer=null;
     
     private void Awake()
     {
@@ -78,44 +79,46 @@ public class SceneManager : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(_currSceneState);
         switch (_currSceneState)
         {
             case SceneState.cutScene:
-                Debug.Log("some cutscene");
                 _currSceneState = SceneState.battleStart;
                 break;
             case SceneState.battleStart:
-                Debug.Log("Battle Start");
                 _currSceneState= SceneState.calOrder;
-                break;
-
-            case SceneState.calOrder:
-                calTimeToAction();
-                Debug.Log("cal finished");
-                sortCreatureList();
-                Debug.Log("sort finsihed");
-                changeSeqIconPos();
-                Debug.Log("change finished");
-                calProgressAfterTTA();
-                Debug.Log("TTA finished");
-
                 if (_creatureObjList[0].GetComponent<Creature>() is Player)
                 {
-                    _currSceneState= SceneState.playerTurn;
+                    _currSceneState = SceneState.playerTurn;
                 }
                 else
                 {
-                    _currSceneState= SceneState.enemyTurn;
+                    _currSceneState = SceneState.enemyTurn;
+                }
+                break;
+
+            case SceneState.calOrder:
+
+                calTimeToAction();
+                sortCreatureList();
+                changeSeqIconPos();
+                calProgressAfterTTA();
+
+                if (_creatureObjList[0].GetComponent<Creature>() is Player)
+                {
+                    _currSceneState = SceneState.playerTurn;
+                }
+                else
+                {
+                    _currSceneState = SceneState.enemyTurn;
                 }
                 break;
 
             case SceneState.playerTurn:
                 //TODO get current player script and status
-                if (Input.GetKeyUp(KeyCode.R))
-                {
-                    _currSceneState = SceneState.calOrder;
-                }
-                //TODO current if player script state is finished, back to calOrder
+                _currPlayer = _creatureObjList[0].GetComponent<Creature>();
+                GameEvents.current.turnChange(_currPlayer);
+                _currSceneState = SceneState.pending;
                 break;
 
             case SceneState.enemyTurn:
@@ -125,24 +128,14 @@ public class SceneManager : MonoBehaviour
                     _currSceneState= SceneState.calOrder;
                 }
                 break;
-
+            case SceneState.pending:
+                Debug.Log("Wait for state change by the current creature!");
+                break;
             case SceneState.battleEnd:
                 Debug.Log("pass data to another scene");
                 break;
             default:
                 break;
-        }
-
-
-        if(Input.GetKeyUp(KeyCode.U)) {
-            calTimeToAction();
-            Debug.Log("cal finished");
-            sortCreatureList();
-            Debug.Log("sort finsihed");
-            changeSeqIconPos();
-            Debug.Log("change finished");
-            calProgressAfterTTA();
-            Debug.Log("TTA finished");
         }
 
     }
@@ -205,8 +198,9 @@ public class SceneManager : MonoBehaviour
         for (int i = 0; i < _creatureObjList.Count; i++)
         {
             GameObject tmpBg = Instantiate(_iconBg, orderSeq.transform.GetChild(i));
+            
             tmpBg.name = _creatureObjList[i].GetComponent<Creature>()._CharName;
-            tmpBg.GetComponent<CreatureIconBg>().setColor(_creatureObjList[i].GetComponent<Creature>() is Player);
+            tmpBg.GetComponent<IconBg>().setColor(_creatureObjList[i].GetComponent<Creature>() is Player);
             tmpBg.transform.GetChild(0).GetComponent<RawImage>().texture = _creatureObjList[i].GetComponent<Creature>()._CreatureIcon;
             _iconBgDict.Add(tmpBg.name,tmpBg);
         }
@@ -246,4 +240,12 @@ public class SceneManager : MonoBehaviour
             yield return new WaitForSeconds(5f);
         }
     }
+
+    public void setSceneStateCal()
+    {
+        _currSceneState = SceneState.calOrder;
+        _currPlayer = null;
+    }
+
+
 }
