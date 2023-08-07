@@ -17,8 +17,8 @@ public class GameEvents : MonoBehaviour
     public event Action<FieldPosition> onShowTargetPos;
     public event Action<FieldPosition> onHideTargetPos;
     public event Action<FieldPosition> onClickTarget;
-
     public event Action<Creature> onTurnChange;
+    public event Action onDropZone;
 
     void Update()
     {
@@ -65,5 +65,11 @@ public class GameEvents : MonoBehaviour
             onTurnChange(c);
         }
     }
-
+    public void DropZone()
+    {
+        if(onDropZone != null)
+        {
+            onDropZone();
+        }
+    }
 }
