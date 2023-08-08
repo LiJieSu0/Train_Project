@@ -38,7 +38,6 @@ namespace CardScene
                     CardPileManager._currCardPileManager.shuffle();
                     drawOneCard();
                 }
-
             }
             showHandCard();
         }

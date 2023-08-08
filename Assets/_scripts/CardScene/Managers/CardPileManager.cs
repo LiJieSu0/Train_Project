@@ -6,12 +6,9 @@ namespace CardScene
 {
     public class CardPileManager : MonoBehaviour
     {
-        Button btn;
         public static CardPileManager _currCardPileManager;
         private void Start()
         {
-            btn = GameObject.Find("shuffleBtn").GetComponent<Button>();
-            btn.onClick.AddListener(() => shuffle());
             _currCardPileManager = this;
         }
 
