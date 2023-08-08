@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interactable
   - DeadZone
+  - CardDropZone
   layers:
   - Default
   - TransparentFX
@@ -40,18 +41,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
-  - name: BackgroundSky
+  - name: Background
     uniqueID: 966361887
-    locked: 0
-  - name: Decoration
-    uniqueID: 1775931829
     locked: 0
   - name: Terraian
     uniqueID: 2165202471
     locked: 0
-  - name: GameObj
-    uniqueID: 2865284419
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Decoration
+    uniqueID: 1775931829
+    locked: 0
+  - name: Card
+    uniqueID: 2572497501
     locked: 0
