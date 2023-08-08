@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FlipCard : MonoBehaviour
 {
-    public bool isFlipped = true; //default is back;
+    private bool isFlipped = true; //default is back;
     private GameObject front;
     private GameObject back;
     void Start()
@@ -21,15 +21,14 @@ public class FlipCard : MonoBehaviour
     {
         
     }
-    void flip()
+    public void flip()
     {
         isFlipped = !isFlipped;
         back.SetActive(isFlipped);
         front.SetActive(!isFlipped);
-
     }
     private void OnMouseUp()
     {
-        flip();
+
     }
 }

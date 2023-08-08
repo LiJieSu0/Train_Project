@@ -41,7 +41,7 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: BackgroundSky
+  - name: Background
     uniqueID: 966361887
     locked: 0
   - name: Terraian

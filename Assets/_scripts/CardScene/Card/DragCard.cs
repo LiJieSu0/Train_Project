@@ -11,8 +11,7 @@ public class DragCard : MonoBehaviour
     private bool isInDropZone=false;
     void Start()
     {
-        initPos = transform.position;
-        initRot = transform.rotation;
+
     }
 
     // Update is called once per frame
@@ -22,25 +21,27 @@ public class DragCard : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            transform.position=mousePos+offset; 
+            transform.position = mousePos + offset;
         }
 
     }
     private void OnMouseDown()
     {
+        initPos = transform.position;
+        initRot = transform.rotation;
         isDragging = true;
-        offset = (Vector2)transform.position - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
-    private void OnMouseDrag()
-    {
-        if (isDragging)
-        {
-            Vector3 newPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            newPosition.z = 0f; // Ensure the card remains on the same Z position
-            transform.position = newPosition;
-        }
-    }
+    //private void OnMouseDrag()
+    //{
+    //    if (isDragging)
+    //    {
+    //        Vector3 newPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //        newPosition.z = -1f; // Ensure the card remains on the same Z position
+    //        transform.position = newPosition;
+    //    }
+    //}
 
     private void OnMouseUp()
     {
