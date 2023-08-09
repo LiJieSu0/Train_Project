@@ -4,9 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Interactable
-  - DeadZone
   - CardDropZone
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -46,6 +45,9 @@ TagManager:
     locked: 0
   - name: Terraian
     uniqueID: 2165202471
+    locked: 0
+  - name: Enemy
+    uniqueID: 4221363425
     locked: 0
   - name: Default
     uniqueID: 0

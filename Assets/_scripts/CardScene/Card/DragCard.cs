@@ -1,3 +1,4 @@
+using CardScene;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,15 +34,6 @@ public class DragCard : MonoBehaviour
         offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
-    //private void OnMouseDrag()
-    //{
-    //    if (isDragging)
-    //    {
-    //        Vector3 newPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //        newPosition.z = -1f; // Ensure the card remains on the same Z position
-    //        transform.position = newPosition;
-    //    }
-    //}
 
     private void OnMouseUp()
     {
@@ -53,9 +45,15 @@ public class DragCard : MonoBehaviour
             Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
             foreach (Collider2D collider in colliders)
             {
-                if (collider.CompareTag("CardDropZone"))
+                if (collider.CompareTag("Enemy"))
                 {
-                    // Card is dropped in the drop zone
+                    //TODO play card
+                    print(collider.gameObject.name);
+                    print(this.gameObject.name);
+                    this.transform.parent = GameObject.Find("GraveyardManager").transform;
+                    this.gameObject.transform.localPosition=new Vector3(0,0,0);
+                    this.GetComponent<BaseCardObj>().PlayCard(collider.gameObject);
+
                     return;
                 }
             }

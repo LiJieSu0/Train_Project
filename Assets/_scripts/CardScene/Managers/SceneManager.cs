@@ -23,13 +23,12 @@ namespace CardScene
         public int currTurn;
         private SceneState _currSceneState;
         public Dictionary<GameObject,int> CardPileDict=new Dictionary<GameObject,int>();
-        public string prefabPath = "Assets/Prefab/Card/Skills/Slash.prefab";
-        private void Awake()
-        {
-            _currSceneState = SceneState.playerTurn;
-        }
+        public GameObject prefabCard;
+        private string prefabPath = "Assets/_Prefab/Card/SkillCards/Slash.prefab";
+
         void Start()
         {
+            _currSceneState = SceneState.playerTurn;
             GameObject loadedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             CardPileDict.Add(loadedPrefab, 15);
             foreach (KeyValuePair<GameObject,int> kvp in CardPileDict)
