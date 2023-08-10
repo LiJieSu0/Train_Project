@@ -4,28 +4,63 @@ using UnityEngine;
 
 namespace CardScene
 {
-    public class PlayerManager : MonoBehaviour
+    public class PlayerManager : MonoBehaviour,IProgress
     {
         public static PlayerManager _pManager;
+        public PlayerAttribute _attr;
         private const int HandCardLimit = 10;
         private int _currHandCard = 0;
         private GameObject _cardPile;
         private GameObject _graveyard;
         private List<GameObject> _handCard=new List<GameObject>();
-        void Start()
+
+
+        private float speed;
+        private float currProgress;
+        private float timeToAction;
+        public int MaxHp;
+        private int _currHp;
+
+        void Awake()
         {
             _pManager = this;
-            _cardPile = GameObject.Find("CardPileManager");
-            _graveyard = GameObject.Find("GraveyardManager");
+            _speed = _attr.Speed;
+            MaxHp = _attr.MaxHP;
+        }
+        void Start()
+        {
+            _cardPile = GameObject.Find(SceneManager.CARDPILE);
+            _graveyard = GameObject.Find(SceneManager.GRAVEYARD);
+
         }
 
         void Update()
         {
         }
 
+        public float _speed
+        {
+            get { return speed; }
+            set { this.speed = value; }
+        }
+        public float _timeToAction
+        {
+            get { return timeToAction; }
+            set { timeToAction = value; }
+        }
+        public float _currProgress
+        {
+            get { return currProgress; }
+            set { this.currProgress= value; }
+        }
+
+        public GameObject _gameObject
+        {
+            get { return this.gameObject; }
+
+        }
         public void DrawCard(int drawNumber=5)
         {
-            Debug.Log(drawNumber);
             for(int i= 0; i < drawNumber; i++) {
                 if (_handCard.Count >= 10) { return; }
                 if (_cardPile.transform.childCount > 0)

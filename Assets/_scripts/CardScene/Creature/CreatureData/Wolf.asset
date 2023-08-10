@@ -12,16 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2c922035a8a95478ed737b5552533e, type: 3}
   m_Name: Wolf
   m_EditorClassIdentifier: 
-  _CharName: 
-  _Speed: 0
-  _MaxHP: 20
-  _MaxEP: 0
-  _Strength: 0
-  _Agility: 0
-  _Constitution: 0
-  _Intelligence: 0
-  _Perception: 0
-  _Luckey: 0
-  _Apperance: 0
+  CreatureName: 
+  MaxHP: 10
+  Defense: 1
+  Armor: 0
+  Speed: 5
   ID: 
-  _CreatureIcon: {fileID: 0}
+  CreatureSprite: {fileID: 0}

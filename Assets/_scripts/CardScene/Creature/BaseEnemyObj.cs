@@ -1,30 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace CardScene
 {
-    public class BaseEnemyObj : MonoBehaviour
+    public class BaseEnemyObj : MonoBehaviour,IProgress
     {
         public CreatureAttribute _attribute;
-        private float MaxHp;
-        private float _currHp;
+        private int MaxHp;
+        private int _currHp;
         public GameObject _healthBar;
+        private float speed;
+        private float timeToAction;
+        private float currProgress;
+
 
         void Start()
         {
-            print(_attribute._MaxHP);
-            MaxHp = _attribute._MaxHP;
+            MaxHp = _attribute.MaxHP;
             _currHp = MaxHp;
-            print(_currHp);
+            speed=_attribute.Speed;
+        }
+
+        public void reduceHp(int damage)
+        {
+            _currHp -= damage;
         }
 
 
-
-        public void reduceHp(float damage)
+        public float _speed
         {
-            _currHp -= damage;
-            print(_currHp);
+            get { return speed; }
+            set { this.speed = value; }
+        }
+        public float _timeToAction
+        {
+            get { return timeToAction; }
+            set { this.timeToAction = value; }
+        }
+        public float _currProgress
+        {
+            get { return currProgress; }
+            set { this.currProgress = value; }
+        }
+
+        public GameObject _gameObject
+        {
+            get { return this.gameObject; }
         }
     }
 }

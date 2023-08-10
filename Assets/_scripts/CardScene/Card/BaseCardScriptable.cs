@@ -10,6 +10,7 @@ namespace CardScene
         Buff,
         Debuff,
         Ability,
+        Summon,
     }
     [CreateAssetMenu(menuName ="Card/Base")]
     public class BaseCardScriptable : ScriptableObject
@@ -17,6 +18,7 @@ namespace CardScene
         public CardType _type;
         public int _targetNumber;
         public int _cost;
+        public float _damage;
         public string _cardName;
         public string _cardDescription;
         public Sprite _sprite;

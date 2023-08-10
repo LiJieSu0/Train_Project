@@ -7,18 +7,12 @@ namespace CardScene
     [CreateAssetMenu(menuName ="Creature/Attribute")]
     public class CreatureAttribute : ScriptableObject
     {
-        public string _CharName;
-        public float _Speed;
-        public float _MaxHP;
-        public float _MaxEP;
-        public float _Strength;
-        public float _Agility;
-        [Header("體質")] public float _Constitution;//
-        public float _Intelligence;
-        public float _Perception;
-        public float _Luckey;
-        public float _Apperance;
+        public string CreatureName;
+        public int MaxHP;
+        public int Defense;
+        public int Armor;
+        public float Speed;
         public string ID;
-        public Texture _CreatureIcon;
+        public Texture CreatureSprite;
     }
 }

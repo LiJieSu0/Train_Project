@@ -6,13 +6,12 @@ namespace CardScene
 {
     public class BaseCardObj : MonoBehaviour,IPlayCard
     {
-        // Start is called before the first frame update
+
         void Start()
         {
         
         }
 
-        // Update is called once per frame
         void Update()
         {
         

@@ -3,66 +3,72 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DragCard : MonoBehaviour
+namespace CardScene
 {
-    private Vector2 initPos;
-    private Quaternion initRot;
-    private bool isDragging = false;
-    private Vector2 offset;
-    private bool isInDropZone=false;
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    public class DragCard : MonoBehaviour
     {
-        if (isDragging)
+        private Vector2 initPos;
+        private Quaternion initRot;
+        private bool isDragging = false;
+        private Vector2 offset;
+        private bool isInDropZone=false;
+        void Start()
         {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            transform.position = mousePos + offset;
+
         }
 
-    }
-    private void OnMouseDown()
-    {
-        initPos = transform.position;
-        initRot = transform.rotation;
-        isDragging = true;
-        offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    }
-
-
-    private void OnMouseUp()
-    {
-        if (isDragging)
+        // Update is called once per frame
+        void Update()
         {
-            isDragging = false;
-
-            // Check if the card is over the drop zone
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
-            foreach (Collider2D collider in colliders)
+            if (isDragging)
             {
-                if (collider.CompareTag("Enemy"))
-                {
-                    //TODO play card
-                    print(collider.gameObject.name);
-                    print(this.gameObject.name);
-                    this.transform.parent = GameObject.Find("GraveyardManager").transform;
-                    this.gameObject.transform.localPosition=new Vector3(0,0,0);
-                    this.GetComponent<BaseCardObj>().PlayCard(collider.gameObject);
-
-                    return;
-                }
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                transform.position = mousePos + offset;
             }
 
-            // Card is not dropped in the drop zone, return to initial position
-            transform.position = initPos;
-            transform.rotation = initRot;
+        }
+        private void OnMouseDown()
+        {
+            initPos = transform.position;
+            initRot = transform.rotation;
+            isDragging = true;
+            offset = transform.position - Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
 
-    }
+
+        private void OnMouseUp()
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+
+                // Check if the card is over the drop zone
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
+                foreach (Collider2D collider in colliders)
+                {
+                    if (collider.CompareTag("Enemy"))
+                    {
+                        //TODO play card
+                        print(collider.gameObject.name);
+                        print(this.gameObject.name);
+                        this.transform.parent = GameObject.Find(SceneManager.GRAVEYARD).transform;
+                        this.gameObject.GetComponent<FlipCard>().flip();
+                        this.gameObject.transform.localPosition=new Vector3(0,0,0);
+                        this.GetComponent<BaseCardObj>().PlayCard(collider.gameObject);
+
+                        return;
+                    }
+                }
+
+                // Card is not dropped in the drop zone, return to initial position
+                transform.position = initPos;
+                transform.rotation = initRot;
+            }
+
+        }
+
+}
 
 }

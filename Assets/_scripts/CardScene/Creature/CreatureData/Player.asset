@@ -9,13 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79a974e6e483d024fa016c2d5a946b3f, type: 3}
-  m_Name: Slash
+  m_Script: {fileID: 11500000, guid: 55dc06d76bbf6ac4792631c75d075873, type: 3}
+  m_Name: Player
   m_EditorClassIdentifier: 
-  _type: 0
-  _targetNumber: 1
-  _cost: 1
-  _damage: 5
-  _cardName: Slash
-  _cardDescription: Deal 5 Damage to 1 Enemy
-  _sprite: {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
+  MaxHP: 20
+  Defense: 2
+  Armor: 0
+  Speed: 3
