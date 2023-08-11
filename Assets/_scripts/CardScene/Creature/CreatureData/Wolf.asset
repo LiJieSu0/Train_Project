@@ -18,4 +18,5 @@ MonoBehaviour:
   Armor: 0
   Speed: 5
   ID: 
+  Damage: 3
   CreatureSprite: {fileID: 0}

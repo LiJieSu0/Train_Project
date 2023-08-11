@@ -20,8 +20,9 @@ namespace CardScene
         {
             if(target != null)
             {
-                target.GetComponent<BaseEnemyObj>().reduceHp(5); //tmp for slash
+                print(target.name);
 
+                target.GetComponent<BaseEnemyObj>().takeDamage(5); //tmp for slash
             }
         }
     }

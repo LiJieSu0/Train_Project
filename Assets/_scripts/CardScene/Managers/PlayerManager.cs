@@ -1,10 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CardScene
 {
-    public class PlayerManager : MonoBehaviour,IProgress
+    public enum PlayerState{
+        Waiting,
+        PreparePhase,
+        CardPlayingPhase,
+        DiscardPhase,
+        SelectingPhase,
+        ConfirmationPhase
+    }
+
+    public class PlayerManager : MonoBehaviour,IProgress,IEffect,IBattle
     {
         public static PlayerManager _pManager;
         public PlayerAttribute _attr;
@@ -15,11 +26,20 @@ namespace CardScene
         private List<GameObject> _handCard=new List<GameObject>();
 
 
+        //Player Status
+        public PlayerState _currPlayerState;
         private float speed;
         private float currProgress;
         private float timeToAction;
-        public int MaxHp;
+        private int MaxHp;
         private int _currHp;
+        public int MaxEp;
+        public int _currEp;
+        private GameObject _healthBar;
+        private TextMeshProUGUI _epState;
+        private Dictionary<BaseEffect, int> effectDict = new Dictionary<BaseEffect, int>();
+        //Player Status
+
 
         void Awake()
         {
@@ -31,11 +51,29 @@ namespace CardScene
         {
             _cardPile = GameObject.Find(SceneManager.CARDPILE);
             _graveyard = GameObject.Find(SceneManager.GRAVEYARD);
-
+            _epState = GameObject.Find("EP_State").GetComponent<TextMeshProUGUI>();
+            _currPlayerState = PlayerState.Waiting;
         }
 
         void Update()
         {
+            switch (_currPlayerState)
+            {
+                case PlayerState.Waiting:
+                    break;
+                case PlayerState.PreparePhase:
+                    if (_currEp < 6) _currEp += SceneManager._currSceneManager._currRound - 1;
+                    drawCard();
+                    //TODO check effect list
+                    _currPlayerState = PlayerState.CardPlayingPhase;
+                    break;
+                case PlayerState.CardPlayingPhase:
+
+                    break;
+                case PlayerState.DiscardPhase: 
+                    discardAllToGrave();
+                    break;
+            }
         }
 
         public float _speed
@@ -53,13 +91,49 @@ namespace CardScene
             get { return currProgress; }
             set { this.currProgress= value; }
         }
-
         public GameObject _gameObject
         {
             get { return this.gameObject; }
 
         }
-        public void DrawCard(int drawNumber=5)
+
+        public Dictionary<BaseEffect, int> _effectDict
+        {
+            get { return effectDict; }
+            set { this.effectDict= value; }
+        }
+
+        public void effectExecution()
+        {
+
+        }
+        public void effectCheckAtStart()
+        {
+
+        }
+
+        public void effectCheckAtEnd()
+        {
+
+        }
+
+        public void takeDamage(int damage, List<BaseEffect> effectList = null)
+        {
+            _currHp -= damage;
+        }
+
+        public void attackTarget(List<GameObject> targetList)
+        {
+            return;
+        }
+
+        public void buffApply(int heal, List<BaseEffect> effectList = null)
+        {
+            _currHp += heal;
+        }
+
+
+        public void drawCard(int drawNumber=5)
         {
             for(int i= 0; i < drawNumber; i++) {
                 if (_handCard.Count >= 10) { return; }
@@ -91,6 +165,7 @@ namespace CardScene
             foreach(var i in _handCard)
             {
                 i.GetComponent<FlipCard>().flip();
+                i.GetComponent<DragCard>().toggleDraggable();
                 i.transform.parent = _graveyard.transform;
                 i.transform.localPosition= new Vector3(0,0,0);
             }
@@ -104,7 +179,13 @@ namespace CardScene
             tmpCard.transform.localPosition = new Vector3(0, 0, 0);
             _handCard.Add(tmpCard);
             tmpCard.GetComponent<FlipCard>().flip();
+            tmpCard.GetComponent<DragCard>().toggleDraggable();
         }
+        public void endPlayerRound()
+        {
+            _currPlayerState = PlayerState.DiscardPhase;
+        }
+
 
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 namespace CardScene
 {
@@ -12,9 +13,9 @@ namespace CardScene
         cutScene,
         battleStart,
         calOrder,
-        playerTurn,
-        teamTurn,
-        enemyTurn,
+        playerRound,
+        teammateRound,
+        enemyRound,
         pending,
         win,
         lose,
@@ -28,6 +29,7 @@ namespace CardScene
         public static string PLAYER = "PlayerManager";
         public static string CARDPILE = "CardPileManager";
         public static string EXILEZONE = "ExileZoneManager";
+        public static string CANVAS = "Canvas";
         //STATIC VARIABLE
 
         //READ FROM STAGE SETTING
@@ -37,15 +39,15 @@ namespace CardScene
         //READ FROM STAGE SETTING
 
         public SceneState _currSceneState;
-        public int currTurn;
+        public int _currRound;
         public Dictionary<GameObject,int> CardPileDict=new Dictionary<GameObject,int>();
         public List<IProgress> _orderList= new List<IProgress>();
+        private float _currTimeToAction;
 
 
 
         private string BasicCardPath = "Assets/_Prefab/Card/SkillCards/";
         private string _PREFABEXTENSION = ".prefab";
-        private string _cardName = "Slash";
 
         private void Awake()
         {
@@ -53,37 +55,62 @@ namespace CardScene
         }
         void Start()
         {   
-            _currSceneState = SceneState.playerTurn;
+            _currSceneState = SceneState.pending;
             //tmp for creating card pile
-            string tmp = Path.Combine(BasicCardPath, _cardName + _PREFABEXTENSION);
-            GameObject loadedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(tmp);
-            CardPileDict.Add(loadedPrefab, 15);
+            CardPile.Add("Slash", 15);
             //tmp for creating card pile
-            createOrderList();
-            calTimeToAction();
-            
             createPile();
+            CardPileManager._currCardPileManager.shuffle();
+
+
+            createOrderList();//tmp for testing
 
         }
 
         void Update()
         {
 
-            
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                calTimeToAction();
+                sortOrderList();
+                calProgressAfterTTA();
+                foreach(var i in _orderList) 
+                {
+                    print(i._gameObject.name);
+                }
+
+            }
             switch (_currSceneState)
             {
-                case SceneState.playerTurn:
-                    print(_orderList[1]._currProgress);
-                    print(_orderList[1]._gameObject.name);
-                    currTurn += 1;
-                    PlayerManager._pManager.DrawCard();
+                case SceneState.cutScene:
+
+                    break;
+
+                case SceneState.battleStart:
+                    createOrderList();
+                    break;
+
+                case SceneState.calOrder:
+                    calTimeToAction();
+                    sortOrderList();
+                    calProgressAfterTTA();
+                    decideActionRound();
+                    break;
+
+                case SceneState.playerRound:
+                    _currRound += 1;
+                    PlayerManager._pManager._currPlayerState = PlayerState.PreparePhase;
                     _currSceneState = SceneState.pending;
                     break;
                 case SceneState.pending:
-                    //TODO wait for current moving change state
+                    //TODO wait for current creature change state
                     break;
-                case SceneState.teamTurn: 
+                case SceneState.teammateRound: 
                     //TODO wait for teammember moving
+                    break;
+                case SceneState.enemyRound:
+
                     break;
                 default:
                     print("Default Scene State");
@@ -91,27 +118,33 @@ namespace CardScene
             }
         }
 
-        private void createPile()
-        {
-            foreach (KeyValuePair<GameObject, int> kvp in CardPileDict)
-            {
-                GameObject keyObj = kvp.Key;
-                int value = kvp.Value;
-                for (var i = 0; i < kvp.Value; i++)
-                {
-                    GameObject tmp = Instantiate(keyObj, GameObject.Find(CARDPILE).transform);
-                    tmp.transform.localPosition = new Vector3(0, 0, 0);
-                    tmp.name += i;
-                }
-            }
-        }
 
         private void createOrderList()
         {
             _orderList.Add(PlayerManager._pManager);
             _orderList.Add(GameObject.Find("Enemy1").GetComponent<BaseEnemyObj>());
+            _orderList.Add(GameObject.Find("Enemy2").GetComponent<BaseEnemyObj>());
+            _orderList.Add(GameObject.Find("Enemy3").GetComponent<BaseEnemyObj>());
+            _orderList.Add(GameObject.Find("Enemy4").GetComponent<BaseEnemyObj>());
+            print(GameObject.Find("Enemy4").GetComponent<BaseEnemyObj>().speed);
         }
 
+        private void createPile()
+        {
+            foreach (KeyValuePair<string, int> kvp in CardPile)
+            {
+                string keyStr = kvp.Key;
+                int cardNum = kvp.Value;
+                string prefabPath = Path.Combine(BasicCardPath, keyStr + _PREFABEXTENSION);
+                GameObject loadedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                for (int i = 0; i < cardNum; i++)
+                {
+                    GameObject tmp = Instantiate(loadedPrefab, GameObject.Find(CARDPILE).transform);
+                    tmp.transform.localPosition = new Vector3(0, 0, 0);
+                    tmp.name += i;
+                }
+            }
+        }
         private void calTimeToAction()
         {
             foreach (var i in _orderList)
@@ -119,7 +152,32 @@ namespace CardScene
                 i._timeToAction= (float)Math.Round((100f - i._currProgress) / i._speed, 2);
             }
         }
+        private void sortOrderList()
+        {
+            _orderList.Sort((p1,p2)=>p1._timeToAction.CompareTo(p2._timeToAction));
+            _currTimeToAction = _orderList[0]._timeToAction;
+        }
+        private void calProgressAfterTTA() //TTA means time to action
+        {
+            _orderList[0]._currProgress = 0;//first item progress is 100 need to be reset after action.
+            for (var i = 1; i < _orderList.Count; i++)
+            {
+                _orderList[i]._currProgress+= (float)Math.Round(_currTimeToAction * _orderList[i]._speed, 2);
+            }
 
+        }
+        private void decideActionRound()
+        {
+            switch (_orderList[0])
+            {
+                case PlayerManager:
+                    _currSceneState = SceneState.playerRound;
+                    break;
+                case BaseEnemyObj:
+                    _currSceneState = SceneState.enemyRound;
+                    break;
+            }
+        }
 
     }
 }

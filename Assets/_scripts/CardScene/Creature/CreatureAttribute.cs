@@ -13,6 +13,7 @@ namespace CardScene
         public int Armor;
         public float Speed;
         public string ID;
+        public int Damage;
         public Texture CreatureSprite;
     }
 }

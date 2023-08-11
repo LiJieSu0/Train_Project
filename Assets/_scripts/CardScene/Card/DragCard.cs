@@ -13,6 +13,7 @@ namespace CardScene
         private bool isDragging = false;
         private Vector2 offset;
         private bool isInDropZone=false;
+        private bool isDraggable = false;
         void Start()
         {
 
@@ -21,7 +22,7 @@ namespace CardScene
         // Update is called once per frame
         void Update()
         {
-            if (isDragging)
+            if (isDragging&& isDraggable)
             {
                 transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -51,10 +52,9 @@ namespace CardScene
                     if (collider.CompareTag("Enemy"))
                     {
                         //TODO play card
-                        print(collider.gameObject.name);
-                        print(this.gameObject.name);
                         this.transform.parent = GameObject.Find(SceneManager.GRAVEYARD).transform;
                         this.gameObject.GetComponent<FlipCard>().flip();
+                        toggleDraggable();
                         this.gameObject.transform.localPosition=new Vector3(0,0,0);
                         this.GetComponent<BaseCardObj>().PlayCard(collider.gameObject);
 
@@ -67,6 +67,11 @@ namespace CardScene
                 transform.rotation = initRot;
             }
 
+        }
+
+        public void toggleDraggable()
+        {
+            isDraggable = !isDraggable;
         }
 
 }
