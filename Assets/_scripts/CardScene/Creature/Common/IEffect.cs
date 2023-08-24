@@ -5,7 +5,12 @@ using UnityEngine;
 public interface IEffect
 {
     Dictionary<BaseEffect,int> _effectDict {get; set;}
-    public void effectExecution();
-    public void effectCheckAtStart();
-    public void effectCheckAtEnd();
+    void effectExecution(BaseEffect effect);
+    void effectExeAtStart();
+    void effectExeAtEnd();
+
+    void removeEffet(BaseEffect effect);
+
+    void addEffectToDict(BaseEffect effect);
+
 }

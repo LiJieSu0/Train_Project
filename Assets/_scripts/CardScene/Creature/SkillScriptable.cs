@@ -10,8 +10,5 @@ public class SkillScriptable : ScriptableObject
     public int targetNums;
     public BaseEffect effect;
 
-    public void ApplyEffect()
-    {
-        
-    }
+
 }

@@ -104,23 +104,68 @@ namespace CardScene
             set { this.effectDict= value; }
         }
 
-        public void effectExecution()
+        public void effectExecution(BaseEffect effect)
+        {
+            foreach(var eType in effect._typeList)
+            {
+                switch (eType)
+                {
+                    case EffectType.Damage:
+                        takeDamage(effect._hpAdjustment);
+                        effectDict[effect] -= 1;
+                        break;
+                    case EffectType.Armor:
+                        break;
+                    case EffectType.EP:
+                        break;
+                    case EffectType.DefenseAdjust:
+                        break;
+                    case EffectType.AttackAdjust:
+                        break;
+                    case EffectType.SpeedAdjust:
+                        break;
+                }
+            }
+        }
+        public void effectExeAtStart()
+        {
+            foreach(var effect in effectDict.Keys)
+            {
+                if (effect._executionTime == EffectExecutionTime.TurnStart)
+                {
+                    effectExecution(effect);
+                }
+            }
+        }
+
+        public void effectExeAtEnd()
+        {
+            foreach (var effect in effectDict.Keys)
+            {
+                if (effect._executionTime == EffectExecutionTime.TurnEnd)
+                {
+                    effectExecution(effect);
+                }
+            }
+        }
+
+        public void addEffectToDict(BaseEffect effect)
+        {
+            if (effect._executionTime != EffectExecutionTime.Permanent) {
+                effectDict.Add(effect, effect._effectDuration);
+            }
+            else
+            {
+                //TODO apply permanent effect here
+            }
+        }
+        public void removeEffet(BaseEffect effect)
         {
 
         }
-        public void effectCheckAtStart()
+        public void takeDamage(int damage)
         {
-
-        }
-
-        public void effectCheckAtEnd()
-        {
-
-        }
-
-        public void takeDamage(int damage, List<BaseEffect> effectList = null)
-        {
-            _currHp -= damage;
+            _currHp += damage;
         }
 
         public void attackTarget(List<GameObject> targetList)
@@ -152,14 +197,14 @@ namespace CardScene
             showHandCard();
         }
         
-        public void showHandCard()
+        public void showHandCard()//TODO change the hand card displaying method
         {
             for(int i=0; i < _handCard.Count; i++)
             {
                 GameObject tmpCardObj = _handCard[i];
                 tmpCardObj.transform.localPosition= new Vector3(0+i*1f,0,0);
             }
-        } //TODO change the hand card displaying method
+        } 
 
         public void discardAllToGrave()
         {
