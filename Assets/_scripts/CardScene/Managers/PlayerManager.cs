@@ -53,6 +53,7 @@ namespace CardScene
             _graveyard = GameObject.Find(SceneManager.GRAVEYARD);
             _epState = GameObject.Find("EP_State").GetComponent<TextMeshProUGUI>();
             _currPlayerState = PlayerState.Waiting;
+            //TODO reduce EP when playing card
         }
 
         void Update()

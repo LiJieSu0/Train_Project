@@ -6,14 +6,15 @@ using UnityEngine.UI;
 
 namespace CardScene
 {
+    public enum EnemyState
+    {
+        Waiting,
+        Acting,
+        Pending,
+        Ending,
+    }
     public class BaseEnemyObj : MonoBehaviour,IProgress,IBattle
     {
-        public enum EnemyState
-        {
-            Waiting,
-            Acting,
-            Ending,
-        }
 
         //Enemy Attribute
         public CreatureAttribute _attribute;
@@ -25,7 +26,7 @@ namespace CardScene
         private int _damage;
         //Enemy Attribute
 
-        private EnemyState _currEnemyState;
+        public EnemyState _currEnemyState;
         private float timeToAction;
         private float currProgress;
         private Dictionary<BaseEffect,int> effectDict= new Dictionary<BaseEffect,int>();
@@ -47,8 +48,6 @@ namespace CardScene
         {
             _copiedHealthBar = Instantiate(_healthBar,GameObject.Find(SceneManager.CANVAS).transform);
             _copiedHealthBar.transform.position=Camera.main.WorldToScreenPoint(this.transform.position+ healthBarOffset);
-
-
             targetList.Add(GameObject.Find("PlayerManager"));//tmp for testing
         }
 
@@ -63,10 +62,22 @@ namespace CardScene
 
                 case EnemyState.Acting:
                     //TODO AI HERE
+                    Debug.Log(this.gameObject.name);
+                    StartCoroutine(AIcoroutine());
+                    
+                    //TODO get all actions selection
+
+                    break;
+
+                case EnemyState.Pending:
+                    Debug.Log("Wait for AI finished");
                     break;
 
                 case EnemyState.Ending:
-                    
+                    Debug.Log("AI finished");
+                    Debug.Log(SceneManager._currSceneManager._currSceneState);
+                    SceneManager._currSceneManager._currSceneState = SceneState.calOrder;
+                    _currEnemyState= EnemyState.Waiting;
                     break;
             }
 
@@ -116,7 +127,7 @@ namespace CardScene
             int targetIdx=Random.Range(0,targetList.Count);
             GameObject target= targetList[targetIdx];
             target.GetComponent<IBattle>().takeDamage(_damage);
-            //Some AI here
+
         }
         public void effectExecution()
         {
@@ -126,10 +137,22 @@ namespace CardScene
         {
 
         }
-
         public void effectCheckAtEnd()
         {
 
         }
+
+
+        private IEnumerator AIcoroutine()
+        {
+            _currEnemyState = EnemyState.Pending;
+            Debug.Log("selecting action");
+            Debug.Log("perform action");
+            Debug.Log("action finish");
+            _currEnemyState = EnemyState.Ending;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+
     }
 }

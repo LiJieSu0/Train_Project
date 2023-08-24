@@ -47,7 +47,7 @@ namespace CardScene
 
 
         private string BasicCardPath = "Assets/_Prefab/Card/SkillCards/";
-        private string _PREFABEXTENSION = ".prefab";
+        private string PREFABEXTENSION = ".prefab";
 
         private void Awake()
         {
@@ -55,15 +55,13 @@ namespace CardScene
         }
         void Start()
         {   
-            _currSceneState = SceneState.pending;
+            _currSceneState = SceneState.cutScene;
             //tmp for creating card pile
             CardPile.Add("Slash", 15);
             //tmp for creating card pile
             createPile();
             CardPileManager._currCardPileManager.shuffle();
 
-
-            createOrderList();//tmp for testing
 
         }
 
@@ -84,14 +82,17 @@ namespace CardScene
             switch (_currSceneState)
             {
                 case SceneState.cutScene:
-
+                    //TODO play some animaition
+                    _currSceneState = SceneState.battleStart;
                     break;
 
                 case SceneState.battleStart:
                     createOrderList();
+                    _currSceneState = SceneState.calOrder;
                     break;
 
                 case SceneState.calOrder:
+                    Debug.Log("calOrder");
                     calTimeToAction();
                     sortOrderList();
                     calProgressAfterTTA();
@@ -110,7 +111,9 @@ namespace CardScene
                     //TODO wait for teammember moving
                     break;
                 case SceneState.enemyRound:
-
+                    //TODO wait for AI working
+                    _orderList[0]._gameObject.GetComponent<BaseEnemyObj>()._currEnemyState=EnemyState.Acting;
+                    _currSceneState = SceneState.pending;
                     break;
                 default:
                     print("Default Scene State");
@@ -126,7 +129,6 @@ namespace CardScene
             _orderList.Add(GameObject.Find("Enemy2").GetComponent<BaseEnemyObj>());
             _orderList.Add(GameObject.Find("Enemy3").GetComponent<BaseEnemyObj>());
             _orderList.Add(GameObject.Find("Enemy4").GetComponent<BaseEnemyObj>());
-            print(GameObject.Find("Enemy4").GetComponent<BaseEnemyObj>().speed);
         }
 
         private void createPile()
@@ -135,7 +137,7 @@ namespace CardScene
             {
                 string keyStr = kvp.Key;
                 int cardNum = kvp.Value;
-                string prefabPath = Path.Combine(BasicCardPath, keyStr + _PREFABEXTENSION);
+                string prefabPath = Path.Combine(BasicCardPath, keyStr + PREFABEXTENSION);
                 GameObject loadedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
                 for (int i = 0; i < cardNum; i++)
                 {
@@ -168,12 +170,15 @@ namespace CardScene
         }
         private void decideActionRound()
         {
+            //Debug.Log(_orderList[0]._gameObject.name);
             switch (_orderList[0])
             {
                 case PlayerManager:
+                    Debug.Log("Player turn");
                     _currSceneState = SceneState.playerRound;
                     break;
                 case BaseEnemyObj:
+                    Debug.Log("Enemy turn");
                     _currSceneState = SceneState.enemyRound;
                     break;
             }

@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class BaseEffect : MonoBehaviour
 {
-    enum EffectType
+    protected enum EffectTime
+    {
+        TurnStart,
+        TurnEnd,
+        Continuous,
+        Permanent,
+    }
+    protected enum EffectType
     {
         Debuff,
         Buff,
         Damage,
         Armor,
+        Special,
     }
-    private EffectType _type;
+    protected EffectType _type;
 
+    public void ApplyEffect()
+    {
+        //TODO decide when to apply it
+    }
 
 }
