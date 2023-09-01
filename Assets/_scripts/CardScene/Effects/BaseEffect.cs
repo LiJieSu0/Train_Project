@@ -34,8 +34,10 @@ public class BaseEffect : ScriptableObject
     public int _stopActionTurn;
     public int _speedAdjustment;
     public int _armorAdjustment;
-    public int _hpAdjustment;
+    public int _hpDamageVal;
+    public int _hpRecoverVal;
     public int _epAdjustment;
+    public Sprite _sprite;
     public void ApplyEffectToCreature(IEffect target)
     {
         target.addEffectToDict(this);

@@ -1442,6 +1442,7 @@ MonoBehaviour:
   _currPlayerState: 0
   MaxEp: 0
   _currEp: 0
+  tmpEffect: {fileID: 11400000, guid: 29339595d4ed8374f8bb3fef4d6161ea, type: 2}
 --- !u!1 &1031758525
 GameObject:
   m_ObjectHideFlags: 0

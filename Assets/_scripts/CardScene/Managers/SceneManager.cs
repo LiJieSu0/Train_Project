@@ -79,6 +79,7 @@ namespace CardScene
                 }
 
             }
+            Debug.Log("Scene state " + _currSceneState);
             switch (_currSceneState)
             {
                 case SceneState.cutScene:

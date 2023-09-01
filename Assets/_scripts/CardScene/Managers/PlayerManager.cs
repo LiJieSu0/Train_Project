@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,6 +41,7 @@ namespace CardScene
         private Dictionary<BaseEffect, int> effectDict = new Dictionary<BaseEffect, int>();
         //Player Status
 
+        public BaseEffect tmpEffect;//tmp for test
 
         void Awake()
         {
@@ -53,6 +55,7 @@ namespace CardScene
             _graveyard = GameObject.Find(SceneManager.GRAVEYARD);
             _epState = GameObject.Find("EP_State").GetComponent<TextMeshProUGUI>();
             _currPlayerState = PlayerState.Waiting;
+            addEffectToDict(tmpEffect);
             //TODO reduce EP when playing card
         }
 
@@ -65,14 +68,15 @@ namespace CardScene
                 case PlayerState.PreparePhase:
                     if (_currEp < 6) _currEp += SceneManager._currSceneManager._currRound - 1;
                     drawCard();
-                    //TODO check effect list
+                    effectExeAtStart();
                     _currPlayerState = PlayerState.CardPlayingPhase;
                     break;
                 case PlayerState.CardPlayingPhase:
-
+                    Debug.Log("Card playing");
                     break;
                 case PlayerState.DiscardPhase: 
                     discardAllToGrave();
+                    effectExeAtEnd();
                     break;
             }
         }
@@ -111,8 +115,9 @@ namespace CardScene
                 switch (eType)
                 {
                     case EffectType.Damage:
-                        takeDamage(effect._hpAdjustment);
-                        effectDict[effect] -= 1;
+                        takeDamage(effect._hpDamageVal);
+                        Debug.Log("reduce duration");
+                        //effectDict[effect] -= 1;
                         break;
                     case EffectType.Armor:
                         break;
@@ -124,22 +129,34 @@ namespace CardScene
                         break;
                     case EffectType.SpeedAdjust:
                         break;
+                    default: 
+                        break;
                 }
             }
         }
+
         public void effectExeAtStart()
         {
+            Debug.Log("Effect exe at start");
+            List<BaseEffect> modifiedEffectList=new List<BaseEffect>();
             foreach(var effect in effectDict.Keys)
             {
                 if (effect._executionTime == EffectExecutionTime.TurnStart)
                 {
+                    Debug.Log(effect._effectName);
                     effectExecution(effect);
+                    modifiedEffectList.Add(effect);
                 }
+            }
+            foreach(var e in modifiedEffectList)
+            {
+                effectDict[e] -= 1;
             }
         }
 
         public void effectExeAtEnd()
         {
+            Debug.Log("Effect exe at start");
             foreach (var effect in effectDict.Keys)
             {
                 if (effect._executionTime == EffectExecutionTime.TurnEnd)
@@ -152,7 +169,7 @@ namespace CardScene
         public void addEffectToDict(BaseEffect effect)
         {
             if (effect._executionTime != EffectExecutionTime.Permanent) {
-                effectDict.Add(effect, effect._effectDuration);
+                effectDict.Add(effect, effect._effectDuration);             
             }
             else
             {
@@ -163,9 +180,14 @@ namespace CardScene
         {
 
         }
-        public void takeDamage(int damage)
+        public void takeDamage(int val)
         {
-            _currHp += damage;
+            _currHp -= val;
+        }
+
+        public void recoverHp(int val)
+        {
+            _currHp += val;
         }
 
         public void attackTarget(List<GameObject> targetList)

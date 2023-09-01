@@ -83,7 +83,7 @@ namespace CardScene
 
         }
 
-        public void takeDamage(int damage, List<BaseEffect> effectList = null)
+        public void takeDamage(int damage)
         {
             _currHp -= damage;
         }

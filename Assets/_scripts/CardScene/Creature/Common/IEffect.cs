@@ -8,9 +8,7 @@ public interface IEffect
     void effectExecution(BaseEffect effect);
     void effectExeAtStart();
     void effectExeAtEnd();
-
     void removeEffet(BaseEffect effect);
-
     void addEffectToDict(BaseEffect effect);
 
 }
